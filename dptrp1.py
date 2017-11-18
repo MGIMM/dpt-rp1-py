@@ -75,9 +75,37 @@ class DigitalPaper(object):
         with open("screenshot.png", 'wb') as f:
             f.write(r.content)
         
+    def upload_document(self, local_path, remote_path):
+        filename = os.path.basename(remote_path)
+        remote_directory = os.path.dirname(remote_path)
+        encoded_directory = quote_plus(remote_directory)
+        directory_entry = dp.get_endpoint(f"/resolve/entry/{encoded_directory}").json()
+        directory_id = directory_entry["entry_id"]
+        info = {
+            "file_name": filename,
+            "parent_folder_id": directory_id,
+            "document_source": ""
+        }
+        r = dp.post_endpoint("/documents", data=info)
+        doc = r.json()
+        doc_id = doc["document_id"]
+        with open(local_path, 'rb') as local_file:
+            files = {
+                'file': ("altair.pdf", local_file, 'rb')
+            }
+            self.put_endpoint(f"/documents/{doc_id}/file", files=files)
+        
+    def take_screenshot(self):
+        url = f"{self.base_url}/system/controls/screen_shot"
+        r = requests.get(url, verify=False, cookies=self.cookies)
+        with open("screenshot.png", 'wb') as f:
+            f.write(r.content)
+
 if __name__ == "__main__":
-    dp = DigitalPaper(client_id="5d8cdd57-d496-459d-bd06-4774223e6707")
+    dp = DigitalPaper(client_id="f5df6f65-ecd2-420f-ada1-e91cc6f6e32b")
     dp.authenticate()
+    #print(dp.get_endpoint('/documents').json())
+    dp.upload_document('./test/test.pdf','Document/test1.pdf')
     
     endpoints = [
         '/documents',

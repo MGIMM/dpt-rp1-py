@@ -36,3 +36,10 @@ sudo asar p ~/Desktop/dpt ./Contents/Resources/app.asar
 ```
 
 Now run the Digital Paper App and it will create two files, _client\_id.txt_ and _key.pem_, on the desktop once the pairing is complete.
+
+------------------
+
+In ubuntu 17.10, I confirm that it is impossible to
+connect dpt-rp1 with usb cable. One possible solution
+is to add the ip address of dpt-rp1 in /etc/hosts
+
