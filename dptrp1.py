@@ -23,7 +23,8 @@ class DigitalPaper(object):
         r = requests.get(url, verify=False)
         return r.json()["nonce"]
 
-    def authenticate(self, path_to_private_key='certs/key.pem'):
+    def authenticate(self,
+            path_to_private_key='certs/key.pem'):
         secret = open(path_to_private_key, 'rb').read()
         sig_maker = httpsig.Signer(secret=secret, algorithm='rsa-sha256')
         nonce = self.get_nonce()
@@ -105,7 +106,8 @@ if __name__ == "__main__":
     dp = DigitalPaper(client_id="f5df6f65-ecd2-420f-ada1-e91cc6f6e32b")
     dp.authenticate()
     #print(dp.get_endpoint('/documents').json())
-    dp.upload_document('./test/test.pdf','Document/test1.pdf')
+    # dp.upload_document('./test/mixing_time_of_mc.pdf','Document/References/Mixing_time_of_Markov_Chain.pdf')
+    dp.take_screenshot()
     
     endpoints = [
         '/documents',
